@@ -8,6 +8,37 @@
 </head>
 <body>
 
+  <!-- Botão de Novidades (Canto Superior Esquerdo - Fora do Cartão) -->
+  <button id="btn-novidades" class="botao-novidades" title="O que há de novo?">
+    📢 Novidades
+  </button>
+
+  <!-- Modal / Janela Pop-up de Novidades -->
+  <div id="modal-novidades" class="modal-container esconde">
+    <div class="modal-conteudo">
+      <div class="modal-cabecalho">
+        <h2>✨ O que há de novo?</h2>
+        <button id="btn-fechar-modal" class="botao-fechar">&times;</button>
+      </div>
+      
+      <ul class="lista-novidades">
+        <li>
+          <strong>📜 Histórico de Tarefas:</strong> Suas tarefas concluídas ou excluídas agora ficam salvas em um histórico com a data e hora do evento.
+        </li>
+        <li>
+          <strong>💾 Salvamento Automático:</strong> Suas tarefas e histórico continuam salvos no navegador mesmo se você recarregar a página.
+        </li>
+        <li>
+          <strong>👤 Perfil do Criador:</strong> Clique no ícone de perfil no canto superior direito do cartão para ver a foto e informações sobre o criador do site!
+        </li>
+        <li>
+          <strong>🎨 Modo Escuro:</strong> Alterne facilmente entre o tema claro e o modo escuro no rodapé da aplicação.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cartão Principal da Aplicação -->
   <main class="cartao-aplicacao">
     <header class="cabecalho-aplicacao">
       <h1>Minhas Tarefas</h1>
@@ -16,15 +47,13 @@
       <div class="menu-container">
         <button id="btn-criador" class="botao-icone" title="Sobre o Criador">👤</button>
         
-        <!-- Painel de Informações do Criador (Aparece ao clicar) -->
+        <!-- Painel do Criador (Aparece ao clicar) -->
         <div id="painel-criador" class="painel-criador esconde">
-          <!-- Substitua o src por sua foto de perfil (ex: minha-foto.jpg) -->
           <img src="IMG_0705.jpg" alt="Foto do Criador" class="foto-criador">
           
           <h3>Felipe Ceciliano</h3>
           <p class="subtitulo-criador">Desenvolvedor Web</p>
           
-          <!-- Caixa de Texto com a Descrição/Bio -->
           <div class="caixa-bio">
             <p>Desenvolvedor apaixonado por tecnologia e criação de aplicações web interativas.</p>
           </div>

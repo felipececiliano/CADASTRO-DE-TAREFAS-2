@@ -1,20 +1,39 @@
-// Elementos da DOM
+// ==========================================
+// 1. MAPEAMENTO DOS ELEMENTOS DA DOM
+// ==========================================
+// Tarefas
 const inputTarefa = document.getElementById('input-tarefa');
 const btnAdicionar = document.getElementById('btn-adicionar');
 const listaTarefas = document.getElementById('lista-tarefas');
+
+// Histórico
 const listaHistorico = document.getElementById('lista-historico');
 const btnLimparHistorico = document.getElementById('btn-limpar-historico');
+
+// Tema
 const btnTema = document.getElementById('btn-tema');
 
-// Elementos do Menu do Criador
+// Painel do Criador (Canto Superior Direito)
 const btnCriador = document.getElementById('btn-criador');
 const painelCriador = document.getElementById('painel-criador');
 
-// Armazenamento das Listas no LocalStorage
+// Modal de Novidades (Canto Superior Esquerdo)
+const btnNovidades = document.getElementById('btn-novidades');
+const modalNovidades = document.getElementById('modal-novidades');
+const btnFecharModal = document.getElementById('btn-fechar-modal');
+
+
+// ==========================================
+// 2. ESTADO DA APLICAÇÃO (LOCALSTORAGE)
+// ==========================================
 let tarefasAtivas = JSON.parse(localStorage.getItem('tarefasAtivas')) || [];
 let historicoTarefas = JSON.parse(localStorage.getItem('historicoTarefas')) || [];
 
-// Atualiza a Interface e salva no LocalStorage
+
+// ==========================================
+// 3. FUNÇÕES DE RENDERIZAÇÃO E ATUALIZAÇÃO
+// ==========================================
+// Atualiza o localStorage e re-renderiza as listas na tela
 function atualizarInterface() {
   localStorage.setItem('tarefasAtivas', JSON.stringify(tarefasAtivas));
   localStorage.setItem('historicoTarefas', JSON.stringify(historicoTarefas));
@@ -23,7 +42,7 @@ function atualizarInterface() {
   renderizarHistorico();
 }
 
-// Renderiza a lista de tarefas ativas
+// Renderiza tarefas que ainda estão pendentes
 function renderizarTarefasAtivas() {
   listaTarefas.innerHTML = '';
 
@@ -43,7 +62,7 @@ function renderizarTarefasAtivas() {
   });
 }
 
-// Renderiza a lista do histórico
+// Renderiza o histórico de tarefas concluídas/excluídas
 function renderizarHistorico() {
   listaHistorico.innerHTML = '';
 
@@ -68,7 +87,11 @@ function renderizarHistorico() {
   });
 }
 
-// Adicionar Nova Tarefa
+
+// ==========================================
+// 4. LÓGICA DAS TAREFAS
+// ==========================================
+// Adicionar nova tarefa
 function adicionarTarefa() {
   const texto = inputTarefa.value.trim();
   if (texto === '') return;
@@ -78,7 +101,7 @@ function adicionarTarefa() {
   atualizarInterface();
 }
 
-// Concluir Tarefa
+// Concluir tarefa e enviar ao histórico
 function concluirTarefa(index) {
   const tarefaRemovida = tarefasAtivas.splice(index, 1)[0];
   
@@ -91,7 +114,7 @@ function concluirTarefa(index) {
   atualizarInterface();
 }
 
-// Excluir Tarefa
+// Excluir tarefa e enviar ao histórico
 function excluirTarefa(index) {
   const tarefaRemovida = tarefasAtivas.splice(index, 1)[0];
 
@@ -104,36 +127,61 @@ function excluirTarefa(index) {
   atualizarInterface();
 }
 
-// Eventos de Input/Botões
+
+// ==========================================
+// 5. EVENT LISTENERS (INTERAÇÕES)
+// ==========================================
+// Adicionar tarefa no clique ou tecla ENTER
 btnAdicionar.addEventListener('click', adicionarTarefa);
 
 inputTarefa.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') adicionarTarefa();
 });
 
+// Limpar todo o histórico
 btnLimparHistorico.addEventListener('click', () => {
-  if (confirm("Deseja realmente apagar o histórico?")) {
+  if (confirm("Deseja realmente apagar todo o histórico?")) {
     historicoTarefas = [];
     atualizarInterface();
   }
 });
 
-// Alternar Modo Escuro
+// Alternar Modo Escuro / Claro
 btnTema.addEventListener('click', () => {
   document.body.classList.toggle('modo-escuro');
 });
 
-// Controle de Abertura/Fechamento do Painel do Criador
+// --- Controle do Painel do Criador ---
 btnCriador.addEventListener('click', (e) => {
   e.stopPropagation();
   painelCriador.classList.toggle('esconde');
 });
 
+// Esconde o painel do criador ao clicar fora dele
 document.addEventListener('click', (e) => {
-  if (!painelCriador.contains(e.target) && e.target !== btnCriador) {
+  if (painelCriador && !painelCriador.contains(e.target) && e.target !== btnCriador) {
     painelCriador.classList.add('esconde');
   }
 });
 
-// Inicialização
+// --- Controle do Modal de Novidades ---
+btnNovidades.addEventListener('click', () => {
+  modalNovidades.classList.remove('esconde');
+});
+
+btnFecharModal.addEventListener('click', () => {
+  modalNovidades.classList.add('esconde');
+});
+
+// Esconde o modal ao clicar na área escura fora do cartão
+modalNovidades.addEventListener('click', (e) => {
+  if (e.target === modalNovidades) {
+    modalNovidades.classList.add('esconde');
+  }
+});
+
+
+// ==========================================
+// 6. INICIALIZAÇÃO DA PÁGINA
+// ==========================================
 document.addEventListener('DOMContentLoaded', atualizarInterface);

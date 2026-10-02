@@ -1,7 +1,7 @@
 /* Variáveis para temas (claro e escuro) */
 :root {
     --imagem-fundo: url('ChatGPT\ Image\ 2\ de\ out.\ de\ 2026\,\ 08_36_28.png');
-    --fundo-cartao: rgba(100, 98, 98, 0.92); /* Leve transparência para destacar a imagem de fundo */
+    --fundo-cartao: rgba(100, 98, 98, 0.92);
     --cor-texto: #e1e2e4;
     --cor-primaria: #6c5ce7;
     --cor-primaria-destaque: #5b4bc4;
@@ -26,13 +26,13 @@
     transition: background 0.3s, color 0.3s;
   }
   
-  /* Aplicação da Imagem de Fundo na tela inteira */
+  /* Imagem de Fundo na Tela Inteira */
   body {
-    background-image: var(--imagem-fundo);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-image: var(--imagem-fundo) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -40,6 +40,7 @@
     padding: 20px;
   }
   
+  /* Cartão Principal */
   .cartao-aplicacao {
     background: var(--fundo-cartao);
     color: var(--cor-texto);
@@ -48,7 +49,7 @@
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(5px); /* Efeito de vidro desfocado no cartão */
+    backdrop-filter: blur(5px);
   }
   
   .cabecalho-aplicacao {
@@ -71,7 +72,97 @@
     cursor: pointer;
   }
   
-  /* Posicionamento do Menu do Criador (Canto Superior Direito) */
+  /* Botão de Novidades (Canto Superior Esquerdo da Tela) */
+  .botao-novidades {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: var(--fundo-cartao);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    z-index: 99;
+    transition: transform 0.2s, background 0.2s;
+  }
+  
+  .botao-novidades:hover {
+    transform: scale(1.05);
+    background-color: var(--cor-primaria);
+    color: #fff;
+  }
+  
+  /* Modal / Pop-up de Novidades */
+  .modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+  }
+  
+  .modal-container.esconde {
+    display: none;
+  }
+  
+  .modal-conteudo {
+    background-color: var(--fundo-cartao);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+    padding: 25px;
+    border-radius: 18px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    animation: aparecer 0.3s ease;
+  }
+  
+  .modal-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  
+  .modal-cabecalho h2 {
+    font-size: 1.3rem;
+  }
+  
+  .botao-fechar {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--cor-texto);
+    cursor: pointer;
+  }
+  
+  .lista-novidades {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .lista-novidades li {
+    background: var(--cor-borda);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  /* Posicionamento do Menu do Criador */
   .menu-container {
     position: relative;
     display: inline-block;
@@ -127,6 +218,7 @@
     width: 100%;
   }
   
+  /* Formulário de Input */
   .caixa-entrada {
     display: flex;
     gap: 10px;
@@ -164,6 +256,7 @@
     transform: translateY(-2px);
   }
   
+  /* Lista de Tarefas */
   .lista-tarefas {
     list-style: none;
     max-height: 280px;
