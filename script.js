@@ -1,82 +1,139 @@
-const botao = document.querySelector(".caixa-entrada button");
-const temaEscuro = document.querySelector(".cabecalho-aplicacao button"); 
-const campoTarefa = document.getElementById("campo-tarefa");
-const lista = document.getElementById("lista-tarefas");
-const contador = document.getElementById("contador-tarefas");
+// Elementos da DOM
+const inputTarefa = document.getElementById('input-tarefa');
+const btnAdicionar = document.getElementById('btn-adicionar');
+const listaTarefas = document.getElementById('lista-tarefas');
+const listaHistorico = document.getElementById('lista-historico');
+const btnLimparHistorico = document.getElementById('btn-limpar-historico');
+const btnTema = document.getElementById('btn-tema');
 
-let tarefas = [];
-let totalTarefas = 0;
+// Elementos do Menu do Criador
+const btnCriador = document.getElementById('btn-criador');
+const painelCriador = document.getElementById('painel-criador');
 
-function adicionarTarefas(){
-    const texto = campoTarefa.value;
+// Armazenamento das Listas no LocalStorage
+let tarefasAtivas = JSON.parse(localStorage.getItem('tarefasAtivas')) || [];
+let historicoTarefas = JSON.parse(localStorage.getItem('historicoTarefas')) || [];
 
-    if (texto === ""){
-        alert("Digite uma tarefa primeiro!");
-        return;
-    }
-
-    const novaLi = document.createElement('li');
-    novaLi.className = "item-tarefa";
-
-    // Define o HTML apenas UMA vez com a estrutura nova
-    novaLi.innerHTML = `
-        <div class="conteudo-tarefa">
-            <span class="icone-check"><i class="fa-regular fa-circle"></i></span>
-            <span class="texto-tarefa">${texto}</span>
-        </div>
-        <button class="botao-acao excluir">
-            <i class="fa-solid fa-trash"></i>
-        </button>
-    `;
-    
-    // --- MARCAR COMO CONCLUÍDA (Com o ícone do "V") ---
-    const conteudoTarefa = novaLi.querySelector(".conteudo-tarefa");
-    conteudoTarefa.addEventListener("click", function() {
-        novaLi.classList.toggle("concluida");
-        
-        // Colocamos o código do ícone DENTRO do clique para ele mudar na hora certa!
-        const iconeCheck = novaLi.querySelector(".icone-check i");
-        if (novaLi.classList.contains("concluida")) {
-            iconeCheck.className = "fa-solid fa-circle-check";
-        } else {
-            iconeCheck.className = "fa-regular fa-circle";
-        }
-    });
-        
-    // --- EXCLUIR TAREFA (O contador diminuindo fica aqui dentro!) ---
-    const botaoApagar = novaLi.querySelector(".excluir");
-    botaoApagar.addEventListener("click", function() {
-        novaLi.remove();
-        
-        // Diminui o contador APENAS quando o botão apagar for clicado
-        if (totalTarefas > 0) {
-            totalTarefas = totalTarefas - 1;
-        }
-        contador.textContent = `${totalTarefas} tarefas na lista`;
-    }); 
-
-    // Adiciona o item pronto na lista do HTML
-    lista.appendChild(novaLi);
-
-    // --- ATUALIZAR CONTADOR AO ADICIONAR ---
-    totalTarefas = totalTarefas + 1;
-    contador.textContent = `${totalTarefas} tarefas na lista`;
-
-    // Limpa o campo de entrada
-    campoTarefa.value = "";
+// Atualiza a Interface e salva no LocalStorage
+function atualizarInterface() {
+  localStorage.setItem('tarefasAtivas', JSON.stringify(tarefasAtivas));
+  localStorage.setItem('historicoTarefas', JSON.stringify(historicoTarefas));
+  
+  renderizarTarefasAtivas();
+  renderizarHistorico();
 }
 
-// Ativa o botão de adicionar tarefa
-botao.addEventListener("click", adicionarTarefas);
+// Renderiza a lista de tarefas ativas
+function renderizarTarefasAtivas() {
+  listaTarefas.innerHTML = '';
 
-//modo escuro
-temaEscuro.addEventListener("click", function() {
-    document.body.classList.toggle("modo-escuro");
-    
-    const icone = temaEscuro.querySelector("i");
-    if (document.body.classList.contains("modo-escuro")) {
-        icone.className = "fa-solid fa-sun";
-    } else {
-        icone.className = "fa-solid fa-moon";
-    }
+  tarefasAtivas.forEach((tarefa, index) => {
+    const li = document.createElement('li');
+    li.className = 'item-tarefa';
+
+    li.innerHTML = `
+      <span>${tarefa}</span>
+      <div class="acoes-tarefa">
+        <button class="botao-acao" onclick="concluirTarefa(${index})" title="Concluir">✓</button>
+        <button class="botao-acao excluir" onclick="excluirTarefa(${index})" title="Excluir">✕</button>
+      </div>
+    `;
+
+    listaTarefas.appendChild(li);
+  });
+}
+
+// Renderiza a lista do histórico
+function renderizarHistorico() {
+  listaHistorico.innerHTML = '';
+
+  if (historicoTarefas.length === 0) {
+    listaHistorico.innerHTML = '<li style="font-size:0.85rem; color: var(--cor-concluido); text-align:center;">Nenhum histórico disponível.</li>';
+    return;
+  }
+
+  historicoTarefas.forEach((item) => {
+    const li = document.createElement('li');
+    li.className = 'item-tarefa concluida';
+
+    li.innerHTML = `
+      <div>
+        <span>${item.texto}</span>
+        <br>
+        <small style="font-size:0.75rem; color: var(--cor-concluido);">${item.status} em: ${item.data}</small>
+      </div>
+    `;
+
+    listaHistorico.appendChild(li);
+  });
+}
+
+// Adicionar Nova Tarefa
+function adicionarTarefa() {
+  const texto = inputTarefa.value.trim();
+  if (texto === '') return;
+
+  tarefasAtivas.push(texto);
+  inputTarefa.value = '';
+  atualizarInterface();
+}
+
+// Concluir Tarefa
+function concluirTarefa(index) {
+  const tarefaRemovida = tarefasAtivas.splice(index, 1)[0];
+  
+  historicoTarefas.unshift({
+    texto: tarefaRemovida,
+    status: 'Concluído',
+    data: new Date().toLocaleString('pt-BR')
+  });
+
+  atualizarInterface();
+}
+
+// Excluir Tarefa
+function excluirTarefa(index) {
+  const tarefaRemovida = tarefasAtivas.splice(index, 1)[0];
+
+  historicoTarefas.unshift({
+    texto: tarefaRemovida,
+    status: 'Excluído',
+    data: new Date().toLocaleString('pt-BR')
+  });
+
+  atualizarInterface();
+}
+
+// Eventos de Input/Botões
+btnAdicionar.addEventListener('click', adicionarTarefa);
+
+inputTarefa.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') adicionarTarefa();
 });
+
+btnLimparHistorico.addEventListener('click', () => {
+  if (confirm("Deseja realmente apagar o histórico?")) {
+    historicoTarefas = [];
+    atualizarInterface();
+  }
+});
+
+// Alternar Modo Escuro
+btnTema.addEventListener('click', () => {
+  document.body.classList.toggle('modo-escuro');
+});
+
+// Controle de Abertura/Fechamento do Painel do Criador
+btnCriador.addEventListener('click', (e) => {
+  e.stopPropagation();
+  painelCriador.classList.toggle('esconde');
+});
+
+document.addEventListener('click', (e) => {
+  if (!painelCriador.contains(e.target) && e.target !== btnCriador) {
+    painelCriador.classList.add('esconde');
+  }
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', atualizarInterface);

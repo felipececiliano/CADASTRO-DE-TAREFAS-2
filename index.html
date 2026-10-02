@@ -1,34 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>meu painel de tarefas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Tarefas</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="cartao-aplicacao">
-        <header class="cabecalho-aplicacao">
-            <h1>Minhas Tarefas</h1>
-            <button id="botao-adicionar" class="botao-principal">
-                <i class="fa-solid fa-moon"></i>
-            </button>
-        </header>
-        <div class="caixa-entrada">
-            <input type="text" id="campo-tarefa" placeholder="O que vamos fazer hoje?">
-            <button id="botao-adicionar" class="botao-principal">
-                <i class="fa-solid fa-plus" ></i>Adicionar</button>
+
+  <main class="cartao-aplicacao">
+    <header class="cabecalho-aplicacao">
+      <h1>Minhas Tarefas</h1>
+      
+      <!-- Container do Botão no Canto Superior Direito -->
+      <div class="menu-container">
+        <button id="btn-criador" class="botao-icone" title="Sobre o Criador">👤</button>
+        
+        <!-- Painel de Informações do Criador (Aparece ao clicar) -->
+        <div id="painel-criador" class="painel-criador esconde">
+          <!-- Substitua o src por sua foto de perfil (ex: minha-foto.jpg) -->
+          <img src="IMG_0705.jpg" alt="Foto do Criador" class="foto-criador">
+          
+          <h3>Felipe Ceciliano</h3>
+          <p class="subtitulo-criador">Desenvolvedor Web</p>
+          
+          <!-- Caixa de Texto com a Descrição/Bio -->
+          <div class="caixa-bio">
+            <p>Desenvolvedor apaixonado por tecnologia e criação de aplicações web interativas.</p>
+          </div>
         </div>
-        <ul id="lista-tarefas" class="lista-tarefas">
-            <!-- as tarefas serão inseridas aqui dinamicamente via JS -->
-        </ul>
+      </div>
+    </header>
 
-        <footer class="rodape-aplicacao">
-            <span id="contador-tarefas">0 tarefas na lista</span>
-        </footer>
-        <script src="script.js"></script>
+    <!-- Formulário para Adicionar Tarefa -->
+    <div class="caixa-entrada">
+      <input type="text" id="input-tarefa" placeholder="Digite uma tarefa...">
+      <button id="btn-adicionar" class="botao-principal">Adicionar</button>
     </div>
-</body>
 
+    <!-- Lista de Tarefas Ativas -->
+    <ul id="lista-tarefas" class="lista-tarefas">
+      <!-- Inserido dinamicamente via JS -->
+    </ul>
+
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--cor-borda);">
+
+    <!-- Seção do Histórico -->
+    <section class="secao-historico">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="font-size: 1.1rem;">Histórico</h2>
+        <button id="btn-limpar-historico" class="botao-acao" style="color: var(--cor-perigo); font-size: 0.85rem;">
+          Limpar Histórico
+        </button>
+      </div>
+
+      <ul id="lista-historico" class="lista-tarefas" style="max-height: 180px;">
+        <!-- Inserido dinamicamente via JS -->
+      </ul>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="rodape aplicacao" style="display: flex; justify-content: space-between; align-items: center;">
+      <p>Gerenciador de Tarefas</p>
+      <button id="btn-tema" class="botao-icone" title="Alternar Tema">🌙 Alternar Tema</button>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
 </html>
